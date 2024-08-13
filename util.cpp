@@ -80,7 +80,7 @@ int readInt(const string prompt, string reprompt) {
             break;
         }
 
-        cout<<  reprompt;
+        cout <<  reprompt;
     }
     return value;
 }
