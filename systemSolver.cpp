@@ -75,7 +75,10 @@ void displayEquations(vector<vector<int>> matrice)
         char coe = 97;
         for (int j = 0; j < eq.size(); j++)
         {
-            cout << 
+            while (j < eq.size() - 1)
+            {
+                cout << "" << eq[j] << coe << " + ";
+            }
         }
     }
 }
