@@ -17,9 +17,13 @@ vector<vector<int>> addRow(vector<vector<int>> matrice, int row1Index, int row2I
 vector<vector<int>> multiplyRow(vector<vector<int>> matrice, int rowIndex, int factor);
 
 //Calc Function Headers
-double dotProduct(vector<double> u, vector<double> v, double angle, string typeAngle = "degrees");
+void displayVector(vector<double> u);
+double dotProduct(double uMag, double vMag, double angle, string typeAngle = "degrees");
+double dotProduct(vector<double> u, vector<double> v);
 double dotProductAngle(vector<double> u, vector<double> v);
 vector<double> projectionUonV(vector<double> u, vector<double> v);
+double crossProductMag(double uMag, double vMag, double angle, string typeAngle = "degrees");
+vector<double> crossProduct(vector<double> u, vector<double> v);
 
 int main()
 {
@@ -49,7 +53,30 @@ int main()
         {
             while (input != "b")
             {
+                if (input == "vectorMultiplication")
+                {
+                    if (input == "d")
+                    {
 
+                    }
+                    if (input == "c")
+                    {
+                        if (input == "mag")
+                        {
+                        
+                        }
+                        if (input == "vec")
+                        {
+
+                        }
+                        cout << "(mag)nitude or (vec)tor form?" << endl;
+                        getline(cin, input);
+                    }
+                    cout << "(c)ross product or (d)ot product?" << endl << "> ";
+                    getline(cin, input);
+                }
+                cout << "do you want (vectorMuliplication), or (b)ack?" << endl << "> ";
+                getline(cin, input); 
             }
         }
         if (input == "matrice")
@@ -130,7 +157,7 @@ int main()
                 cout << endl;
             }
         }
-        cout << "Are you here for (calc), (matrices), or (e)xit" << endl;
+        cout << "Are you here for (calc), (matrices), or (e)xit" << endl << "> ";
         getline(cin, input);
     }
     return 0;
@@ -277,11 +304,28 @@ vector<vector<int>> multiplyRow(vector<vector<int>> matrice, int rowIndex, int f
 }
 
 //Calc Function
-double dotProduct(vector<double> u, vector<double> v, double angle, string typeAngle)
+void displayVector(vector<double> u)
+{
+    char direc = 105;
+    for (int i = 0; i < u.size(); i++)
+    {
+        direc = 105 + i;
+        string directAsStr(1, direc);
+        if (i < u.size() - 1)
+        {
+            cout << u[i] << direc << " + ";
+        }
+        else
+        {
+            cout << u[i] << direc;
+        }
+    }
+    cout << endl;
+}
+
+double dotProduct(double uMag, double vMag, double angle, string typeAngle)
 {
     double angleInRadians;
-    double magVectU;
-    double magVectV;
     if (typeAngle == "degrees")
     {
         angleInRadians = angle / 180 * PI;
@@ -290,17 +334,17 @@ double dotProduct(vector<double> u, vector<double> v, double angle, string typeA
     {
         angleInRadians = angle * PI;
     }
-    for (double num : u)
+    return uMag * vMag * cos(angleInRadians);
+}
+
+double dotProduct(vector<double> u, vector<double> v)
+{
+    double ans = 0;
+    for (int i = 0; i < u.size(); i++)
     {
-        magVectU += pow(num, 2);
+        ans += (u[i] * v[i]);
     }
-    magVectU = sqrt(magVectU);
-    for (double num : v)
-    {
-        magVectV += pow(num, 2);
-    }
-    magVectV = sqrt(magVectV);
-    return magVectU * magVectV * cos(angleInRadians);
+    return ans;
 }
 
 double dotProductAngle(vector<double> u, vector<double> v)
@@ -336,4 +380,40 @@ vector<double> projectionUonV(vector<double> u, vector<double> v)
     vector<double> projection {};
     double scalarMultiple = 0.0;
     return u;
+}
+
+double crossProductMag(double uMag, double vMag, double angle, string typeAngle)
+{
+    double angleInRadians;
+    if (typeAngle == "degrees")
+    {
+        angleInRadians = angle / 180 * PI;
+    }
+    else
+    {
+        angleInRadians = angle * PI;
+    }
+    return uMag * vMag * sin(angleInRadians);
+}
+
+vector<double> crossProduct(vector<double> u, vector<double> v)
+{
+    vector<double> crosprod {};
+    int next;
+    double component;
+    for (int i = 1; i < u.size() + 1; i++)
+    {
+        next = i + 1;
+        if (next > u.size() - 1)
+        {
+            next -= u.size();
+        }
+        if (i > u.size() - 1)
+        {
+            next -= u.size();
+        }
+        component = u[i] * v[next] - u[next] * v[i];
+        crosprod.push_back(component);
+    }
+    return crosprod;
 }
