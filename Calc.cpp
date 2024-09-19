@@ -24,7 +24,10 @@ double dotProductAngle(vector<double> u, vector<double> v);
 vector<double> projectionUonV(vector<double> u, vector<double> v);
 double crossProductMag(double uMag, double vMag, double angle, string typeAngle = "degrees");
 vector<double> crossProduct(vector<double> u, vector<double> v);
+void planeFrom3Points(vector<double> p1, vector<double> p2, vector<double> p3);
+double distancePointToLine(vector<double> point, vector<double> line);
 
+//Main
 int main()
 {
     string input = "x";
@@ -42,9 +45,13 @@ int main()
     int factor;
 
     //Calc vars
+    vector<double> p1 {};
+    vector<double> p2 {};
+    vector<double> p3 {};
+    char variable = 120;
+    string message = "";
 
-
-    //Loop
+    //UI Loop
     while (input != "e")
     {
         cout << setprecision(50);
@@ -75,7 +82,50 @@ int main()
                     cout << "(c)ross product or (d)ot product?" << endl << "> ";
                     getline(cin, input);
                 }
-                cout << "do you want (vectorMuliplication), or (b)ack?" << endl << "> ";
+                if (input == "lps")
+                {
+                    while (input != "ba")
+                    {
+                        if (input == "plane")
+                        {
+                            while(input != "bac")
+                            {
+                                if (input == "3p")
+                                {
+                                    for (int i = 0; i < 3; i++)
+                                    {
+                                        variable = 120 + i;
+                                        string varStr(1, variable);
+                                        message = "Enter " + varStr + " value for p1: ";
+                                        p1.push_back(readDouble(message));
+                                    }
+                                    for (int i = 0; i < 3; i++)
+                                    {
+                                        variable = 120 + i;
+                                        string varStr(1, variable);
+                                        message = "Enter " + varStr + " value for p2: ";
+                                        p2.push_back(readDouble(message));
+                                    }
+                                    for (int i = 0; i < 3; i++)
+                                    {
+                                        variable = 120 + i;
+                                        string varStr(1, variable);
+                                        message = "Enter " + varStr + " value for p3: ";
+                                        p3.push_back(readDouble(message));
+                                    }
+                                    cout << endl;
+                                    planeFrom3Points(p1, p2, p3);
+                                    cout << endl;
+                                }
+                                cout << "plane from 3 points (3p), or (bac)k?" << endl << "> ";
+                                getline(cin, input); 
+                            }
+                        }
+                        cout << "(line)s, (plane)s, (surface)s, or (ba)ck?" << endl << "> ";
+                        getline(cin, input); 
+                    }
+                }
+                cout << "do you want (vectorMuliplication), LinesPlanes&Surfaces (lps), or (b)ack?" << endl << "> ";
                 getline(cin, input); 
             }
         }
@@ -399,21 +449,64 @@ double crossProductMag(double uMag, double vMag, double angle, string typeAngle)
 vector<double> crossProduct(vector<double> u, vector<double> v)
 {
     vector<double> crosprod {};
+    int first;
     int next;
     double component;
     for (int i = 1; i < u.size() + 1; i++)
     {
-        next = i + 1;
+        first = i;
+        if (first > u.size() - 1)
+        {
+            first -= u.size();
+        }
+        next = first + 1;
         if (next > u.size() - 1)
         {
             next -= u.size();
         }
-        if (i > u.size() - 1)
-        {
-            next -= u.size();
-        }
-        component = u[i] * v[next] - u[next] * v[i];
+        component = u[first] * v[next] - u[next] * v[first];
         crosprod.push_back(component);
     }
     return crosprod;
+}
+
+void planeFrom3Points(vector<double> p1, vector<double> p2, vector<double> p3)
+{
+    vector<double> u {};
+    vector<double> v {};
+    vector<double> planeVector {};
+    double item;
+    double number = 0;
+    char variable = 120;
+    for (int i = 0; i < p1.size(); i++)
+    {
+        item = p2[i] - p1[i];
+        u.push_back(item);
+        item = p3[i] - p1[i];
+        v.push_back(item);
+    }
+    planeVector = crossProduct(u, v);
+    for (int i = 0; i < p1.size(); i++)
+    {
+        number += planeVector[i] * p1[i];
+    }
+    for (int i = 0; i < planeVector.size(); i++)
+    {
+        variable = 120 + i;
+        string varStr(1, variable);
+        if (i != planeVector.size() - 1)
+        {
+            cout << planeVector[i] << varStr << " + ";
+        }
+        else
+        {
+            cout << planeVector[i] << varStr << " = ";
+        }
+    }
+    cout << number << endl;
+}
+
+double distancePointToLine(vector<double> point, vector<double> line)
+{
+    
 }
